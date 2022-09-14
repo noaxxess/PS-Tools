@@ -1,4 +1,10 @@
-﻿
+﻿<#This is a script to get Uninstall strings for apps from the registry.
+It will search by app name and/or publisher. 
+It will find uninstall strings in both x86 and 64-bit Registry Paths
+The only required parameters is the csv path to save the output.
+If no search parameters are specified it will output all uninstall strings.
+#>
+
 param (
     [Parameter(Mandatory = $False)][String]$Publisher,
     [Parameter(Mandatory = $False)][String]$Name,
@@ -26,16 +32,13 @@ $RegPaths = @(
     )
     
 
-$UninstallStrings = ForEach ($RegPath IN $RegPaths){
+$RegPaths.foreach({
   
-    Write-Host "$RegPath" 
-    Get-ChildItem -Path $RegPath | 
+    Write-Host "$_" 
+    Get-ChildItem -Path $_ | 
     ForEach-Object{Get-ItemProperty $_.PsPath} | 
     Select-Object Publisher,  PSChildName, DisplayName, DisplayVersion, UninstallString | 
-    Where-Object { $_.Publisher -like $Publisher -and $_.Name -like $Name} 
+    Where-Object { $_.Publisher -like $Publisher -and $_.DisplayName -like $Name} 
          
-}
-  
-    
-$UninstallStrings | Export-Csv -Path $CSVPath
+}) | Export-CSV -NoTypeInformation -Path $CSVPath
 
