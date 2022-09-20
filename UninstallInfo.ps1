@@ -34,7 +34,6 @@ $RegPaths = @(
 
 $RegPaths.foreach({
   
-    Write-Host "$_" 
     Get-ChildItem -Path $_ | 
     ForEach-Object{Get-ItemProperty $_.PsPath} | 
     Select-Object Publisher,  PSChildName, DisplayName, DisplayVersion, UninstallString | 
