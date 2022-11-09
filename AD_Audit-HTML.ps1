@@ -38,7 +38,7 @@
 .PARAMETER ADModNumber
     Active Directory Objects that have been modified within [X] amount of days.
 
-    -ADModNumber "3"
+    -ADModNumber "7"
 
 .NOTES
     Version: 1.0.3
@@ -78,7 +78,7 @@ param (
 	$DaysUntilPWExpireINT = 7,
 	
 	#Get AD Objects that have been modified in X days and newer
-	[Parameter(ValueFromPipeline = $true, HelpMessage = "AD Objects that have been modified within [X] amount of days; Default: 3")]
+	[Parameter(ValueFromPipeline = $true, HelpMessage = "AD Objects that have been modified within [X] amount of days; Default: 7")]
 	$ADModNumber = 7
 	
 	#CSS template located C:\Program Files\WindowsPowerShell\Modules\ReportHTML\1.4.1.1\
