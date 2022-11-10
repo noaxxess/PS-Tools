@@ -55,7 +55,7 @@ param (
 	
 	#Logo that will be on the right side, UNC or URL
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter URL or UNC path for Side Logo")]
-	[String]$RightLogo = "https://www.secsign.com/wp-content/uploads/2018/02/active-directory-logo.png",
+	[String]$RightLogo = "https://alwaysuptech.com/assets/img/AD_Thumb.png",
 
 	#Title of generated report
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter desired title for report")]
