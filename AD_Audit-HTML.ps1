@@ -47,17 +47,18 @@
     Modified: JBear 12/5/2018
     Bradley Wyatt 12/8/2018
     jporgand 12/6/2018
+    Noaxxess 11/11/22
 #>
 
 param (
 
 	#Company logo that will be displayed on the left, can be URL or UNC
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter URL or UNC path to Company Logo")]
-	[String]$CompanyLogo = "https://alwaysuptech.com/assets/img/AUT-NoBack-Small.png",
+	[String]$CompanyLogo = "\\NetShare\PathToLogo.png",
 	#Logo that will be on the right side, UNC or URL
 
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter URL or UNC path for Side Logo")]
-	[String]$RightLogo = "https://marketplace.brainwavegrc.com/wp-content/uploads/bw_store_facet_images/bw_activedirectory_bw_activedirectory-900x0.png",
+	[String]$RightLogo = "\\NetShare\PathToLogo.png",
 	#Title of generated report
 
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter desired title for report")]
