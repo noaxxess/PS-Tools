@@ -1838,4 +1838,4 @@ $Month = (Get-Date).Month
 $Year = (Get-Date).Year
 $ReportName = ("AD Report-$Month $Day $Year")
 
-Save-HTMLReport -ReportContent $FinalReport -ShowReport -ReportName $ReportName -ReportPath $ReportSavePath
+Save-HTMLReport -ReportContent $FinalReport -ReportName $ReportName -ReportPath $ReportSavePath
