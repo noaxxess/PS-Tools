@@ -21,9 +21,9 @@
     -ReportTitle "Active Directory Report"
 
 .PARAMETER FileName
-    Enter desired FileName for generated report.
+    Enter desired FileName for generated report. HTML extension will be added by ReportHTML Module
 
-    -FileName "ADReportToday.html"
+    -FileName "ADReportToday"
 
 .PARAMETER Days
     Users that have not logged in [X] amount of days or more.
