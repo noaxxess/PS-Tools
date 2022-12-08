@@ -1,6 +1,6 @@
 Param(
   [string] $ACCOUNT = "testprofile",
-  [string] $NEWPATH = "C:\users\testprofile"
+  [string] $NEWPATH = "C:\users"
 )
 
 
