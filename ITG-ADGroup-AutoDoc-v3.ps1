@@ -60,7 +60,7 @@ foreach ($Group in $AllGroups) {
         $ObjType = (Get-ADObject -Filter {SamAccountName -eq $Member.SamAccountName}).ObjectClass
         if($ObjType -eq 'User'){
             $Email = (Get-AdUser $Member -Properties EmailAddress).EmailAddress
-            $Contacts += (Get-ITGlueContacts -orgid $OrgID -filter_primary_email $email).data
+            $Contacts += (Get-ITGlueContacts -organization_id $OrgID -filter_primary_email $email).data
             }
         # if ($ObjType -eq 'Computer'){
         #     $ComputerName = 
