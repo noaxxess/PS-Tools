@@ -32,7 +32,7 @@ param (
 
 
 $APIEndpoint = "https://api.itglue.com"
-$FlexAssetName = "ITGLue AutoDoc - Active Directory Groups v2"
+$FlexAssetName = "ITGLue AutoDoc - Active Directory Groups v3"
 $Description = "Lists all groups and users in them."
 
 #####################################################################
@@ -54,7 +54,7 @@ $AllGroups = Get-AdGroup -filter *
 foreach ($Group in $AllGroups) {
     $Contacts = @()
     $Members = Get-AdGroupMember $Group
-    $MembersTable = $Members | Select-Object Name, distinguishedName | ConvertTo-Html -Fragment | Out-String
+    $MembersTable = $Members | Select-Object Name, SamAccountName, distinguishedName | ConvertTo-Html -Fragment | Out-String
 
     foreach ($Member in $Members) {
         $ObjType = (Get-ADObject -Filter {SamAccountName -eq $Member.SamAccountName}).ObjectClass
