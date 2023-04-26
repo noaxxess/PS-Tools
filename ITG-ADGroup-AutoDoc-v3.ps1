@@ -32,7 +32,7 @@ param (
 
 
 $APIEndpoint = "https://api.itglue.com"
-$FlexAssetName = "ITGLue AutoDoc - Active Directory Groups v2"
+$FlexAssetName = "ITGLue AutoDoc - Active Directory Groups v3"
 $Description = "Lists all groups and users in them."
 
 #####################################################################
