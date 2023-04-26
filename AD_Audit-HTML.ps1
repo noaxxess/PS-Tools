@@ -20,6 +20,11 @@
 
     -ReportTitle "Active Directory Report"
 
+.PARAMETER FileName
+    Enter desired FileName for generated report. HTML extension will be added by ReportHTML Module
+
+    -FileName "ADReportToday"
+
 .PARAMETER Days
     Users that have not logged in [X] amount of days or more.
 
@@ -63,8 +68,12 @@ param (
 
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter desired title for report")]
 	[String]$ReportTitle = "Active Directory Report",
-	#Location the report will be saved to
+	#File Name the report will be saved to
 
+	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter desired file name for report")]
+	[String]$FileName,
+	#Location the report will be saved to	
+	
 	[Parameter(ValueFromPipeline = $true, HelpMessage = "Enter desired directory path to save; Default: C:\Temp\")]
 	[String]$ReportSavePath = "C:\Temp\",
 	#Find users that have not logged in X Amount of days, this sets the days
@@ -88,20 +97,6 @@ param (
 	#Default template is orange and named "Sample"
 )
 
-<#
-Write-Host "Gathering Report Customization..." -ForegroundColor White
-Write-Host "__________________________________" -ForegroundColor White
-(Write-Host -NoNewline "Company Logo (left): " -ForegroundColor Yellow), (Write-Host  $CompanyLogo -ForegroundColor White)
-(Write-Host -NoNewline "Company Logo (right): " -ForegroundColor Yellow), (Write-Host  $RightLogo -ForegroundColor White)
-(Write-Host -NoNewline "Report Title: " -ForegroundColor Yellow), (Write-Host  $ReportTitle -ForegroundColor White)
-(Write-Host -NoNewline "Report Save Path: " -ForegroundColor Yellow), (Write-Host  $ReportSavePath -ForegroundColor White)
-(Write-Host -NoNewline "Amount of Days from Last User Logon Report: " -ForegroundColor Yellow), (Write-Host  $Days -ForegroundColor White)
-(Write-Host -NoNewline "Amount of Days for New User Creation Report: " -ForegroundColor Yellow), (Write-Host  $UserCreatedDays -ForegroundColor White)
-(Write-Host -NoNewline "Amount of Days for User Password Expiration Report: " -ForegroundColor Yellow), (Write-Host  $DaysUntilPWExpireINT -ForegroundColor White)
-(Write-Host -NoNewline "Amount of Days for Newly Modified AD Objects Report: " -ForegroundColor Yellow), (Write-Host  $ADModNumber -ForegroundColor White)
-Write-Host "__________________________________" -ForegroundColor White
-#>
-
 function LastLogonConvert ($ftDate)
 {
 
@@ -121,20 +116,14 @@ function LastLogonConvert ($ftDate)
 
 } #End function LastLogonConvert
 
-#Check for ReportHTML Module
-$Mod = Get-Module -ListAvailable -Name "ReportHTML"
-
-If ($null -eq $Mod)
+#Check if FileName is specified, if not create one
+if (!$PSBoundParameters.ContainsKey('FileName'))
 {
-	<#
-	Write-Host "ReportHTML Module is not present, attempting to install it"
-	#>
-
-	Install-Module -Name ReportHTML -Force
-	Import-Module ReportHTML -ErrorAction SilentlyContinue
+	$Day = (Get-Date).Day
+	$Month = (Get-Date).Month
+	$Year = (Get-Date).Year
+	$FileName = ("AD Report-$Month $Day $Year")
 }
-
-
 
 #Array of default Security Groups
 $DefaultSGs = @(
@@ -228,13 +217,6 @@ $GraphComputerOS = New-Object 'System.Collections.Generic.List[System.Object]'
 $AllUsers = Get-ADUser -Filter * -Properties *
 
 $GPOs = Get-GPO -All | Select-Object DisplayName, GPOStatus, ModificationTime, @{ Label = "ComputerVersion"; Expression = { $_.computer.dsversion } }, @{ Label = "UserVersion"; Expression = { $_.user.dsversion } }
-<#
-<###########################
-         Dashboard
-############################>
-<#
-Write-Host "Working on Dashboard Report..." -ForegroundColor Green
-#>
 
 $dte = (Get-Date).AddDays(- $ADModNumber)
 
@@ -559,18 +541,6 @@ if (($DomainTable).Count -eq 0)
 	$DomainTable.Add($obj)
 }
 
-<#
-Write-Host "Done!" -ForegroundColor White
-
-<###########################
-
-		   Groups
-
-############################>
-<#
-Write-Host "Working on Groups Report..." -ForegroundColor Green
-#>
-
 #Get groups and sort in alphabetical order
 $Groups = Get-ADGroup -Filter * -Properties *
 $SecurityCount = 0
@@ -791,19 +761,6 @@ $objmem = [PSCustomObject]@{
 
 $GroupMembershipTable.Add($objmem)
 
-<#
-Write-Host "Done!" -ForegroundColor White
-
-<###########################
-
-    Organizational Units
-
-############################>
-
-<#
-Write-Host "Working on Organizational Units Report..." -ForegroundColor Green
-#>
-
 #Get all OUs'
 $OUs = Get-ADOrganizationalUnit -Filter * -Properties *
 $OUwithLinked = 0
@@ -905,20 +862,6 @@ $obj2 = [PSCustomObject]@{
 }
 
 $OUProtectionTable.Add($obj2)
-
-<#
-Write-Host "Done!" -ForegroundColor White
-
-<###########################
-
-           USERS
-
-############################>
-<#
-
-Write-Host "Working on Users Report..." -ForegroundColor Green
-
-#>
 
 $UserEnabled = 0
 $UserDisabled = 0
@@ -1188,17 +1131,6 @@ Else
 	$TOPUserTable.Add($objULic)
 }
 
-<#
-Write-Host "Done!" -ForegroundColor White
-<###########################
-
-	   Group Policy
-
-############################>
-<#
-Write-Host "Working on Group Policy Report..." -ForegroundColor Green
-#>
-
 $GPOTable = New-Object 'System.Collections.Generic.List[System.Object]'
 
 foreach ($GPO in $GPOs)
@@ -1224,17 +1156,6 @@ if (($GPOTable).Count -eq 0)
 	}
 	$GPOTable.Add($obj)
 }
-
-<#
-Write-Host "Done!" -ForegroundColor White
-<###########################
-
-	   Computers
-
-############################>
-<#
-Write-Host "Working on Computers Report..." -ForegroundColor Green
-#>
 
 $Computers = Get-ADComputer -Filter * -Properties *
 $ComputersProtected = 0
@@ -1833,9 +1754,4 @@ $FinalReport.Add($(Get-HTMLContentclose))
 $FinalReport.Add($(Get-HTMLTabContentClose))
 $FinalReport.Add($(Get-HTMLClosePage))
 
-$Day = (Get-Date).Day
-$Month = (Get-Date).Month
-$Year = (Get-Date).Year
-$ReportName = ("AD Report-$Month $Day $Year")
-
-Save-HTMLReport -ReportContent $FinalReport -ReportName $ReportName -ReportPath $ReportSavePath
+Save-HTMLReport -ReportContent $FinalReport -ReportName $FileName -ReportPath $ReportSavePath
