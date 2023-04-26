@@ -16,7 +16,7 @@
     Modified By: Noaxxess
     Date: 04/25/2023
 
-#>   
+#>
 
 
 param (
@@ -59,12 +59,13 @@ foreach ($Group in $AllGroups) {
     foreach ($Member in $Members) {
         $ObjType = (Get-ADObject -Filter {SamAccountName -eq $Member.SamAccountName}).ObjectClass
         if($ObjType -eq 'User'){
-            $Email = (Get-AdUser $Member -Properties EmailAddress).EmailAddress
+            $Email = (Get-AdUser $Member -Properties EmailAddress).EmailAddress
             $Email
             }
-        if ($ObjType -eq 'Computer'){
-            $Config = (Get-AdComputer $Member -Properties )
-        }
+        # if ($ObjType -eq 'Computer'){
+        #     $ComputerName = 
+        #     $Config = (Get-AdComputer $Member -Properties )
+        # }
         }
     }
 
