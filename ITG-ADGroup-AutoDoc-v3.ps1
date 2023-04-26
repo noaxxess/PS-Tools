@@ -66,7 +66,6 @@ foreach ($Group in $AllGroups) {
         #     $ComputerName = 
         #     $Config = (Get-AdComputer $Member -Properties )
         # }
-        }
     }
 
     $FlexAssetBody = @{
