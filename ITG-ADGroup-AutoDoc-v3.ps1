@@ -54,13 +54,13 @@ $AllGroups = Get-AdGroup -filter *
 foreach ($Group in $AllGroups) {
     $Contacts = @()
     $Members = Get-AdGroupMember $Group
-    $MembersTable = $Members | Select-Object Name, distinguishedName | ConvertTo-Html -Fragment | Out-String
+    $MembersTable = $Members | Select-Object Name, SamAccountName, distinguishedName | ConvertTo-Html -Fragment | Out-String
 
     foreach ($Member in $Members) {
         $ObjType = (Get-ADObject -Filter {SamAccountName -eq $Member.SamAccountName}).ObjectClass
         if($ObjType -eq 'User'){
             $Email = (Get-AdUser $Member -Properties EmailAddress).EmailAddress
-            $Email
+            $Contacts += (Get-ITGlueContacts -orgid $OrgID -filter_primary_email $email).data
             }
         # if ($ObjType -eq 'Computer'){
         #     $ComputerName = 
