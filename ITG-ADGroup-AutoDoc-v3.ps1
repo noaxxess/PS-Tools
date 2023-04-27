@@ -21,12 +21,12 @@
 
 param (
 
-[Parameter(ValueFromPipeline = $true, HelpMessage = "API Key")]
-[String]$APIKey,
-#IT GLue API Key
-[Parameter(ValueFromPipeline = $true, HelpMessage = "Organization ID")]
-[String]$OrgID
-#IT GLue Organization ID
+    [Parameter(ValueFromPipeline = $true, HelpMessage = "API Key")]
+    [String]$APIKey,
+    #IT GLue API Key
+    [Parameter(ValueFromPipeline = $true, HelpMessage = "Organization ID")]
+    [String]$OrgID
+    #IT GLue Organization ID
 
 )
 
@@ -39,7 +39,8 @@ $Description = "Lists all groups and users in them."
 
 if (Get-Module -ListAvailable -Name "ITGlueAPI") {
     Import-Module ITGlueAPI
-} else {
+}
+else {
     Install-Module ITGlueAPI -Force
     Import-Module ITGlueAPI
 }
@@ -52,21 +53,26 @@ Add-ITGlueAPIKey $APIKey
 $AllGroups = Get-AdGroup -filter *
 
 foreach ($Group in $AllGroups) {
-    $Contacts = @()    
+    $Contacts = @()
+    # $Configs = @()    
     $Members = Get-AdGroupMember $Group
     $MembersTable = $Members | Select-Object Name, SamAccountName, distinguishedName | ConvertTo-Html -Fragment | Out-String
 
     foreach ($Member in $Members) {
-        $ObjType = (Get-ADObject -Filter {SamAccountName -eq $Member.SamAccountName}).ObjectClass
-        if($ObjType -eq 'User'){
+        $ObjType = (Get-ADObject -Filter { SamAccountName -eq $Member.SamAccountName }).ObjectClass
+        if ($ObjType -eq 'User') {
             $Email = (Get-AdUser $Member -Properties EmailAddress).EmailAddress
-            if($email){
-                $Contacts += (Get-ITGlueContacts -organization_id $OrgID -filter_primary_email $email).data
-                }
+            if ($Email) {
+                $Contacts += (Get-ITGlueContacts -organization_id $OrgID -filter_primary_email $Email).data
             }
-        # if ($ObjType -eq 'Computer'){
-        #     $ComputerName = 
-        #     $Config = (Get-AdComputer $Member -Properties )
+        }
+        # if ($ObjType -eq 'Computer') {
+        #     $ComputerName = (Get-AdComputer $Member -Properties Name ).Name
+        #     if ($ComputerName) {
+        #         $Configs += (Get-ITGlueConfigurations -organization_id $OrgID -filter_name $ComputerName).data 
+        #     }
+        
+            
         # }
     }
 
@@ -75,10 +81,11 @@ foreach ($Group in $AllGroups) {
         attributes = @{
             name   = $FlexAssetName
             traits = @{
-                "group-name"   = $($group.name)
+                "group-name"   = $($Group.Name)
                 "members"      = $MembersTable
-                "guid"         = $($group.objectguid.guid)
-                "tagged-users" = $Contacts.id
+                "guid"         = $($Group.ObjectGuid.Guid)
+                "tagged-users" = $Contacts.Id
+                # "tagged-configurations" = $Configs.Id
             }
         }
     }
@@ -138,6 +145,17 @@ foreach ($Group in $AllGroups) {
                                 required       = $false
                                 "show-in-list" = $false
                             }
+                        # },
+                        # @{
+                        #     type       = "flexible_asset_fields"
+                        #     attributes = @{
+                        #         order          = 5
+                        #         name           = "Tagged Configurations"
+                        #         kind           = "Tag"
+                        #         "tag-type"     = "Configurations"
+                        #         required       = $false
+                        #         "show-in-list" = $false
+                        #     }
                         }
                     )
                 }
@@ -156,7 +174,8 @@ foreach ($Group in $AllGroups) {
         $FlexAssetBody.attributes.add('flexible-asset-type-id', $FilterID.id)
         Write-Host "Creating new flexible asset"
         New-ITGlueFlexibleAssets -data $FlexAssetBody
-    } else {
+    }
+    else {
         Write-Host "Updating Flexible Asset"
         $ExistingFlexAsset = $ExistingFlexAsset[-1]
         Set-ITGlueFlexibleAssets -id $ExistingFlexAsset.id -data $FlexAssetBody
