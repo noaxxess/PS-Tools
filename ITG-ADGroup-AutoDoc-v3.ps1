@@ -52,7 +52,7 @@ Add-ITGlueAPIKey $APIKey
 $AllGroups = Get-AdGroup -filter *
 
 foreach ($Group in $AllGroups) {
-    $Contacts = @()
+    $Contacts = @()    
     $Members = Get-AdGroupMember $Group
     $MembersTable = $Members | Select-Object Name, SamAccountName, distinguishedName | ConvertTo-Html -Fragment | Out-String
 
@@ -60,7 +60,9 @@ foreach ($Group in $AllGroups) {
         $ObjType = (Get-ADObject -Filter {SamAccountName -eq $Member.SamAccountName}).ObjectClass
         if($ObjType -eq 'User'){
             $Email = (Get-AdUser $Member -Properties EmailAddress).EmailAddress
-            $Contacts += (Get-ITGlueContacts -organization_id $OrgID -filter_primary_email $email).data
+            if($email){
+                $Contacts += (Get-ITGlueContacts -organization_id $OrgID -filter_primary_email $email).data
+                }
             }
         # if ($ObjType -eq 'Computer'){
         #     $ComputerName = 
