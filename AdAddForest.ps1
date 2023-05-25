@@ -7,8 +7,13 @@
 	[String]$NBName,
     #Safe Mode Password	
     [Parameter(ValueFromPipeline = $true, Mandatory=$true, HelpMessage = "SafeMode Password")]
-    [String]$SmPassword
+    [String]$SmPassword,
+    [Parameter(ValueFromPipeline = $true, Mandatory=$true, HelpMessage = "Drive Letter")]
+    [String]$DrvLtr
     )
+
+$NTDSPath = $DrvLtr + ":\NTDS"
+$SysVolPath = $DrvLtr + ":\SYSVOL"
 
 #Convert Password String to password hash
 $SecPassword=(ConvertTo-SecureString -String $SMPassword -AsPlainText -Force)
@@ -16,12 +21,12 @@ $SecPassword=(ConvertTo-SecureString -String $SMPassword -AsPlainText -Force)
 #Install and Configure Forest
 Install-ADDSForest `
 -CreateDnsDelegation:$false `
--DatabasePath "F:\NTDS" `
+-DatabasePath $NTDSPath`
 -DomainName $DomainName `
 -DomainNetbiosName $NBName `
 -InstallDns:$true `
--LogPath "F:\NTDS" `
--SysvolPath "F:\SYSVOL" `
+-LogPath $NTDSPath `
+-SysvolPath $SysVolPath `
 -SafeModeAdministratorPassword $SecPassword `
 -NoRebootOnCompletion:$true `
 -Verbose `
