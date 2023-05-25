@@ -1,0 +1,33 @@
+﻿param (	
+	#Domain Name
+	[Parameter(ValueFromPipeline = $true, Mandatory=$true, HelpMessage = "Domain Name")]
+	[String]$DomainName,
+    #NetBios Name
+	[Parameter(ValueFromPipeline = $true, Mandatory=$true, HelpMessage = "NetBios Name")]
+	[String]$NBName,
+    #Safe Mode Password	
+    [Parameter(ValueFromPipeline = $true, Mandatory=$true, HelpMessage = "SafeMode Password")]
+    [String]$SmPassword
+    )
+
+#Convert Password String to password hash
+$SecPassword=(ConvertTo-SecureString -String $SMPassword -AsPlainText -Force)
+
+#Install and Configure Forest
+Install-ADDSForest `
+-CreateDnsDelegation:$false `
+-DatabasePath "F:\NTDS" `
+-DomainName $DomainName `
+-DomainNetbiosName $NBName `
+-InstallDns:$true `
+-LogPath "F:\NTDS" `
+-SysvolPath "F:\SYSVOL" `
+-SafeModeAdministratorPassword $SecPassword `
+-NoRebootOnCompletion:$true `
+-Verbose `
+-Force:$true >> 'C:\AddForest.log'
+
+#Enable PS-Remoting
+Enable-PSRemoting -Force
+
+Restart-Computer
