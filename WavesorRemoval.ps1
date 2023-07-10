@@ -1,3 +1,14 @@
+param(
+    [parameter(Mandatory=$False)]
+    [String]$LogFile
+)
+
+if($PSBoundParameters.ContainsKey('LogFile') -eq $false){
+    $LogFile = "C:\Temp\RemoveWaveSor.log"
+}
+
+Start-Transcript -Path $LogFile -NoClobber
+
 Get-Process wavebrowser -ErrorAction SilentlyContinue | Stop-Process -Force
 Get-Process SWUpdater -ErrorAction SilentlyContinue | Stop-Process -Force
 sleep 2
@@ -123,3 +134,5 @@ foreach ($i in $sid_list) {
         remove-item "Registry::$i\WavesorSWUpdater.Update3WebUser.1.0" -Recurse -ErrorAction SilentlyContinue
     }
 }
+
+Stop-Transcript
