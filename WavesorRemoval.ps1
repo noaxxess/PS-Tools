@@ -134,11 +134,8 @@ foreach ($sid in $sid_list) {
             }
         }
     }
-}
-
-foreach ($sid in $sid_list) {
     if ($sid -like "*_Classes*") {
-        Write-Host $sid + " Located. Removing Registry Keys"
+        Write-Host  "Removing Wavesor Entries for " + $sid 
         remove-item "Registry::$sid\WaveBrwsHTM*" -Recurse -ErrorAction SilentlyContinue
         remove-item "Registry::$sid\WavesorSWUpdater.CredentialDialogUser" -Recurse -ErrorAction SilentlyContinue
         remove-item "Registry::$sid\WavesorSWUpdater.CredentialDialogUser.1.0" -Recurse -ErrorAction SilentlyContinue
