@@ -1,12 +1,15 @@
 param(
     [parameter(Mandatory=$False)]
-    [String]$LogFile
+    [String]$LogPath
 )
 
-if($PSBoundParameters.ContainsKey('LogFile') -eq $false){
-    $timeStr = get-date -f 'yyyy-MM-dd-HHmmss' 
-    $LogFile = "C:\Temp\RemoveWaveSor" + $timeStr + ".log"
+if($PSBoundParameters.ContainsKey('LogPath') -eq $false){
+    $LogPath = "C:\Temp"
 }
+
+$timeStr = get-date -f 'yyyy-MM-dd-HHmmss' 
+$LogFile = $LogPath + "\" + $timeStr + ".log"
+
 
 Start-Transcript -Path $LogFile -NoClobber
 
