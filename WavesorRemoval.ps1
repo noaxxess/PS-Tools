@@ -136,7 +136,6 @@ foreach ($sid in $sid_list) {
     }
 }
 
-$sid_list = Get-Item -Path "Registry::HKU\*" | Select-String -Pattern "S-\d-(?:\d+-){5,14}\d+"
 foreach ($sid in $sid_list) {
     if ($sid -like "*_Classes*") {
         Write-Host $sid + " Located. Removing Registry Keys"
