@@ -39,7 +39,7 @@ try {
     }
 
     # Create the new local user
-    New-LocalUser -Name $newUser -Password $password -FullName "New Admin User" -Description "Local Administrator Account"
+    New-LocalUser -Name $newUser -Password $password -FullName "New Admin User" -Description "Local Administrator Account" -PasswordNeverExpires $true
     WriteLog "User $newUser has been created."
 
     # Add the new user to the Administrators group
