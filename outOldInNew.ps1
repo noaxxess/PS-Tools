@@ -77,7 +77,7 @@ if ($confirmation -eq "Complete") {
 	 	WriteLog "Removing $oldUser User Directory..."
 		Get-ChildItem "C:\Users" | Where-Object {$_.Name -eq "$oldUser"} | Remove-Item -Force
  	} else {
-  		WriteLog $oldUser "does not exist"
+  		WriteLog "$oldUser does not exist"
     	}
     } catch {
         WriteLog "An error occurred: $_"
