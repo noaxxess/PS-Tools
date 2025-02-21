@@ -44,7 +44,8 @@ try {
 
     # Check if the user already exists
     if (Get-LocalUser -Name $newUser -ErrorAction SilentlyContinue) {
-        throw "User $newUser already exists."
+        WriteLog "User $newUser already exists."
+	throw "User $newUser already exists."
     }
 
     # Create the new local user
