@@ -12,7 +12,7 @@ param (
 	[string]$logFile
 )
 #Set today's date variable
-$todayTime = (Get-Date).toString("MMddyyHHmm")
+$todayTime = (Get-Date).toString("MMddyyyyHHmm")
 
 #Create function to log results
 function WriteLog {
@@ -32,8 +32,8 @@ if (!($PSBoundParameters.ContainsKey('newUserName'))){
 }
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
- 	WriteLog $newUserName "not passed in"
-  	WriteLog "Setting logFile to" $logFile
+ 	WriteLog $newUserName + "not passed in"
+  	WriteLog "Setting logFile to" + $logFile
 }
 
 
