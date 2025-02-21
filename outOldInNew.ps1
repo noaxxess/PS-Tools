@@ -19,7 +19,7 @@ if (!($PSBoundParameters.ContainsKey('newUserName'))){
 	$newUserName = "New Admin User"
 }
 if (!($PSBoundParameters.ContainsKey('logFile'))){
-	$newUserName = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
+	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
 }
 
 function WriteLog {
