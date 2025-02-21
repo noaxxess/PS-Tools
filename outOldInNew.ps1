@@ -56,12 +56,19 @@ catch {
 
 if ($confirmation -eq "Complete") {
     try {
-		WriteLog "Attempting to remove $oldUser"
-        # Attempt to remove the old admin user account
-        Remove-LocalUser -Name $oldUser
-        WriteLog "User account '$oldUser' has been successfully deleted."
-		WriteLog "Removing $oldUser User Directory..."
+	WriteLog "Attempting to remove $oldUser"
+ 	if(Get-LocalUser -Name $oldUser){
+	        # Attempt to remove the old admin user account
+	        $oldUserSID = Get-LocalUser -Name $oldUser | Select-Object -ExpandProperty SID
+		Remove-LocalUser -Name $oldUser
+	        WriteLog "User account '$oldUser' has been successfully deleted."
+		WriteLog "Removing $oldUser Registry Key"
+	 	Remove-Item "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$oldUserSID" -Recurse -Force 
+	 	WriteLog "Removing $oldUser User Directory..."
 		Get-ChildItem "C:\Users" | Where-Object {$_.Name -eq "$oldUser"} | Remove-Item -Force
+ 	} else {
+  		WriteLog $oldUser "does not exist"
+    	}
     } catch {
         WriteLog "An error occurred: $_"
     }
