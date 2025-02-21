@@ -67,7 +67,7 @@ catch {
 if ($confirmation -eq "Complete") {
     try {
 	WriteLog "Attempting to remove $oldUser"
- 	if((Get-LocalUser -Name $oldUser) -eq $oldUser){
+ 	if((Get-LocalUser -Name $oldUser).Name -eq $oldUser){
 	        # Attempt to remove the old admin user account
 	        $oldUserSID = Get-LocalUser -Name $oldUser | Select-Object -ExpandProperty SID
 		Remove-LocalUser -Name $oldUser
