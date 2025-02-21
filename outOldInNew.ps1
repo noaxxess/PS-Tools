@@ -27,13 +27,13 @@ function WriteLog {
 #Set non-mandatory variables if not present
 if (!($PSBoundParameters.ContainsKey('newUserName'))){
 	$newUserName = "New Admin User"
- 	WriteLog $newUserName "not passed in"
-  	WriteLog "Setting newUserName to" $newUserName
+ 	WriteLog "$newUserName not passed in"
+  	WriteLog "Setting newUserName to $newUserName"
 }
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
- 	WriteLog $newUserName + "not passed in"
-  	WriteLog "Setting logFile to" + $logFile
+ 	WriteLog "$logFile not passed in"
+  	WriteLog "Setting logFile to $logFile"
 }
 
 
