@@ -58,7 +58,7 @@ try {
     }
 }
 catch {
-    Write-Error "An error occurred: $_"
+    WriteLog "An error occurred: $_"
 	$confirmation="Failed"
 }
 
