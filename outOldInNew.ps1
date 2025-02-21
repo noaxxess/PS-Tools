@@ -19,14 +19,14 @@ if (!($PSBoundParameters.ContainsKey('newUserName'))){
 	$newUserName = "New Admin User"
 }
 if (!($PSBoundParameters.ContainsKey('logFile'))){
-	$logFile = "C:\Temp\outOldInNew-$todayTime.log"
+	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
 }
 
 function WriteLog {
 	Param ([string]$LogString)
 	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
 	$LogMessage = "$Stamp $LogString"
-	Add-content $LogFile -value $LogMessage
+	Add-content $logFile -value $LogMessage
 }
 
 try {
@@ -61,17 +61,12 @@ if ($confirmation -eq "Complete") {
         Remove-LocalUser -Name $oldUser
         WriteLog "User account '$oldUser' has been successfully deleted."
 		WriteLog "Removing $oldUser User Directory..."
-		$oldUserDir = Get-ChildItem "C:\Users" | Where-Object {$_.Name -eq "$oldUser"}
-		if($oldUserDir -ne $null){
-			$oldUserDir | Remove-Item -Force
-			WriteLog "$oldUser Directory Removed"
-		} else {
-			WriteLog "$oldUser Directory Not Present"
-		}
+		Get-ChildItem "C:\Users" | Where-Object {$_.Name -eq "$oldUser"} | Remove-Item -Force
     } catch {
         WriteLog "An error occurred: $_"
     }
 } else {
     WriteLog "Operation cancelled."
 }
+
 
