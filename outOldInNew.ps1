@@ -32,7 +32,7 @@ if (!($PSBoundParameters.ContainsKey('newUserName'))){
 }
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
- 	WriteLog "$logFile not passed in"
+ 	WriteLog "logFile not passed in"
   	WriteLog "Setting logFile to $logFile"
 }
 
