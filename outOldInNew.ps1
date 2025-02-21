@@ -14,20 +14,29 @@ param (
 #Set today's date variable
 $todayTime = (Get-Date).toString("MMddyyHHmm")
 
-#set non-mandatory variables if not present
-if (!($PSBoundParameters.ContainsKey('newUserName'))){
-	$newUserName = "New Admin User"
-}
-if (!($PSBoundParameters.ContainsKey('logFile'))){
-	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
-}
-
+#Create function to log results
 function WriteLog {
-	Param ([string]$LogString)
+	Param (
+ 		[string]$LogString
+   	)
 	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
 	$LogMessage = "$Stamp $LogString"
 	Add-content $logFile -value $LogMessage
 }
+
+#Set non-mandatory variables if not present
+if (!($PSBoundParameters.ContainsKey('newUserName'))){
+	$newUserName = "New Admin User"
+ 	WriteLog $newUserName "not passed in"
+  	WriteLog "Setting newUserName to" $newUserName
+}
+if (!($PSBoundParameters.ContainsKey('logFile'))){
+	$logFile = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
+ 	WriteLog $newUserName "not passed in"
+  	WriteLog "Setting logFile to" $logFile
+}
+
+
 
 try {
     # Define the newUser and password for the new user
