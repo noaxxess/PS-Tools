@@ -45,8 +45,7 @@ try {
     # Check if the user already exists
     if (Get-LocalUser -Name $newUser -ErrorAction SilentlyContinue) {
         WriteLog "User $newUser already exists."
-	throw "User $newUser already exists."
-    }
+    } else { 
 
     # Create the new local user
     New-LocalUser -Name $newUser -Password $password -FullName "New Admin User" -Description "Local Administrator Account" -PasswordNeverExpires $true
@@ -55,7 +54,8 @@ try {
     # Add the new user to the Administrators group
     Add-LocalGroupMember -Group "Administrators" -Member $newUser
     WriteLog "User $newUser has been added to the Administrators group."
-	$confirmation="Complete"
+    $confirmation="Complete"
+    }
 }
 catch {
     Write-Error "An error occurred: $_"
