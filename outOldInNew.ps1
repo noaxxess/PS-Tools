@@ -12,13 +12,13 @@ param (
 	[string]$logFile
 )
 #Set today's date variable
-$todayTime(Get-Date).toString("MMddyyHHmm")
+$todayTime = (Get-Date).toString("MMddyyHHmm")
 
 #set non-mandatory variables if not present
-if (!($PSBoundParameters.ContainsKey('newUserName')){
+if (!($PSBoundParameters.ContainsKey('newUserName'))){
 	$newUserName = "New Admin User"
 }
-if (!($PSBoundParameters.ContainsKey('logFile')){
+if (!($PSBoundParameters.ContainsKey('logFile'))){
 	$newUserName = "C:\Temp\RemoveAddAdminUser-$todayTime.log"
 }
 
