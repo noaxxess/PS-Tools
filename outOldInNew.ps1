@@ -73,7 +73,7 @@ if ($confirmation -eq "Complete") {
         WriteLog "An error occurred: $_"
     }
 } else {
-    WriteLog "Operation cancelled."
+    WriteLog "New User Not Created. Operation cancelled."
 }
 
 
