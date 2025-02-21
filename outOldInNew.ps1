@@ -48,7 +48,7 @@ try {
     } else { 
 
     # Create the new local user
-    New-LocalUser -Name $newUser -Password $password -FullName "New Admin User" -Description "Local Administrator Account" -PasswordNeverExpires
+    New-LocalUser -Name $newUser -Password $password -FullName $newUserName -Description "Local Administrator Account" -AccountNeverExpires
     WriteLog "User $newUser has been created."
 
     # Add the new user to the Administrators group
