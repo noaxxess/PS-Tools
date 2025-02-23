@@ -1,7 +1,7 @@
 param(
-	[parameter(mandatory = true)]
+	[parameter(mandatory = $true)]
 	[string]$folderPath,
-	[parameter(mandatory = false)]
+	[parameter(mandatory = $false)]
 	[string]$logFile
 	)
 
