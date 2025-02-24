@@ -23,7 +23,10 @@ function WriteLog {
 	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
 	#Combine TimeStamp and Log entry for logfile
  	$LogMessage = "$Stamp $LogString"
-	Add-content $logFile -value $LogMessage
+  	if (!(Get-Item -Path $logFile)){
+   		New-Item $logFile
+     	}
+	Add-Content -Path $logFile -Value $LogMessage
 }
 
 WriteLog "Executing Script"
