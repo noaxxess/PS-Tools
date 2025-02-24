@@ -19,7 +19,7 @@ function WriteLog {
  		[Parameter(mandatory = $false)]
 		[string]$logFile,
  		[Parameter(mandatory = $true)]
- 		[string]$LogString
+ 		[string]$logString
    	)
     	#Set tiemStamp for Log Entries
 	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
@@ -28,7 +28,7 @@ function WriteLog {
   	if (!(Get-Item -Path $logFile)){
    		New-Item $logFile
      	}
-	Add-Content -Path $logFile -Value $LogMessage
+	Add-Content -Path $logFile -Value $logMessage
 }
 
 WriteLog "Executing Script"
