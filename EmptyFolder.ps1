@@ -16,6 +16,8 @@ if (!($PSBoundParameters.ContainsKey('logFile'))){
 #Function to Log results
 function WriteLog {
 	Param (
+ 		[Parameter(mandatory = $false)]
+		[string]$logFile,
  		[Parameter(mandatory = $true)]
  		[string]$LogString
    	)
@@ -40,17 +42,17 @@ try {
 		foreach ($item in $items) {
 		    if ($item.PSIsContainer) {
 		      Remove-Item -Path $item.FullName -Recurse -Force
-				  WriteLog "$item.Fullname removed."
+				  WriteLog -logFile $logFile -logString "$item.Fullname removed."
 		    } else {
 		      Remove-Item -Path $item.FullName -Force
-				  WriteLog "$item.Fullname removed."
+				  WriteLog -logFile $logFile -logString "$item.Fullname removed."
 		    }
 		}
   	} else {
-   	WriteLog "No Content found in $folderPath"
+   	WriteLog -logFile $logFile -logString "No Content found in $folderPath"
     	}
 	
-	WriteLog "Folder contents cleared, but the folder itself is retained."
+	WriteLog -logFile $logFile -logString "Folder contents cleared, but the folder itself is retained."
  } catch {
-	WriteLog "An unexpected error occurred:$_"
+	WriteLog -logFile $logFile -logString "An unexpected error occurred:$_"
 }
