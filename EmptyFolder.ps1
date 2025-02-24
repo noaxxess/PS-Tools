@@ -16,6 +16,7 @@ if (!($PSBoundParameters.ContainsKey('logFile'))){
 #Function to Log results
 function WriteLog {
 	Param (
+ 		[Parameter(mandatory = $true)]
  		[string]$LogString
    	)
     	#Set tiemStamp for Log Entries
