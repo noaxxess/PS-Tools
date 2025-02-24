@@ -5,7 +5,7 @@ param (
 	[string]$folderPath,
 	[Parameter(mandatory = $false)]
 	[string]$logFile
-	)
+)
 
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	#Set today's date variable
