@@ -18,7 +18,7 @@ function WriteLog {
 	Param (
  		[Parameter(mandatory = $false)]
 		[string]$logFile,
- 		[Parameter(mandatory = $true)]
+ 		[Parameter(mandatory = $false)]
  		[string]$logString
    	)
     	#Set tiemStamp for Log Entries
@@ -31,7 +31,7 @@ function WriteLog {
 	Add-Content -Path $logFile -Value $logMessage
 }
 
-WriteLog "Executing Script"
+WriteLog -logFile $logFile -logString "Executing Script"
 try {
 	# Get all files and subdirectories in the folder
  	$items = Get-ChildItem -Path $folderPath
