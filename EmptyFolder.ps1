@@ -8,7 +8,7 @@ param(
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	#Set today's date variable
 	$todayTime = (Get-Date).toString("MMddyyHHmm")
-	$logFile = "C:\Temp\EmptyFolder-$todayTime.log"
+	$logFile = "C:\Logs\EmptyFolder-$todayTime.log"
 }
 
 function WriteLog {
