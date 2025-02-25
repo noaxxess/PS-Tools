@@ -12,7 +12,7 @@ if (!($PSBoundParameters.ContainsKey('logFile'))){
 	#Set today's date variable
 	$todayTime = (Get-Date).toString("MMddyyHHmm")
  	#check if default log directory exists, if not create it
- 	if(!(Test-Path $logDir){
+ 	if(!(Test-Path $logDir)){
   		New-Item -ItemType "Directory" -Path $logDir
 	}
 	$logFile = "$logDir\EmptyFolder-$todayTime.log"
