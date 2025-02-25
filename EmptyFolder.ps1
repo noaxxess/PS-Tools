@@ -17,21 +17,17 @@ if (!($PSBoundParameters.ContainsKey('logFile'))){
 function WriteLog {
 	Param (
  		[Parameter(mandatory = $false)]
-		[string]$logFile,
- 		[Parameter(mandatory = $false)]
  		[string]$logString
    	)
     	#Set tiemStamp for Log Entries
 	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
 	#Combine TimeStamp and Log entry for logfile
  	$LogMessage = "$Stamp $LogString"
-  	if (!(Get-Item -Path $logFile)){
-   		New-Item $logFile
-     	}
+  	
 	Add-Content -Path $logFile -Value $logMessage
 }
 
-WriteLog -logFile $logFile -logString "Executing Script"
+WriteLog -logString "Executing Script"
 try {
 	# Get all files and subdirectories in the folder
  	$items = Get-ChildItem -Path $folderPath
@@ -42,17 +38,17 @@ try {
 		foreach ($item in $items) {
 		    if ($item.PSIsContainer) {
 		      Remove-Item -Path $item.FullName -Recurse -Force
-				  WriteLog -logFile $logFile -logString "$item.Fullname removed."
+				  WriteLog -logString "$item.Fullname removed."
 		    } else {
 		      Remove-Item -Path $item.FullName -Force
-				  WriteLog -logFile $logFile -logString "$item.Fullname removed."
+				  WriteLog -logString "$item.Fullname removed."
 		    }
 		}
   	} else {
-   	WriteLog -logFile $logFile -logString "No Content found in $folderPath"
+   	WriteLog -logString "No Content found in $folderPath"
     	}
 	
-	WriteLog -logFile $logFile -logString "Folder contents cleared, but the folder itself is retained."
+	WriteLog -logString "Folder contents cleared, but the folder itself is retained."
  } catch {
-	WriteLog -logFile $logFile -logString "An unexpected error occurred:$_"
+	WriteLog -logString "An unexpected error occurred:$_"
 }
