@@ -11,6 +11,7 @@ $logDir = "C:\Logs"
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	#Set today's date variable
 	$todayTime = (Get-Date).toString("MMddyyHHmm")
+ 	#check if default log directory exists, if not create it
  	if(!(Test-Path $logDir){
   		New-Item -ItemType "Directory" -Path $logDir
 	}
@@ -23,7 +24,7 @@ function WriteLog {
  		[Parameter(mandatory = $false)]
  		[string]$logString
    	)
-    	#Set tiemStamp for Log Entries
+    	#Set timeStamp for Log Entries
 	$Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
 	#Combine TimeStamp and Log entry for logfile
  	$LogMessage = "$Stamp $LogString"
