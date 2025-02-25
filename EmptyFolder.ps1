@@ -43,10 +43,10 @@ try {
 		foreach ($item in $items) {
 		    if ($item.PSIsContainer) {
 		      Remove-Item -Path $item.FullName -Recurse -Force
-				  WriteLog -logString "$item.Fullname removed."
+				  WriteLog -logString "$item removed."
 		    } else {
 		      Remove-Item -Path $item.FullName -Force
-				  WriteLog -logString "$item.Fullname removed."
+				  WriteLog -logString "$item removed."
 		    }
 		}
   	} else {
