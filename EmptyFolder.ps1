@@ -6,11 +6,15 @@ param (
 	[Parameter(mandatory = $false)]
 	[string]$logFile
 )
+$logDir = "C:\Logs"
 
 if (!($PSBoundParameters.ContainsKey('logFile'))){
 	#Set today's date variable
 	$todayTime = (Get-Date).toString("MMddyyHHmm")
-	$logFile = "C:\Logs\EmptyFolder-$todayTime.log"
+ 	if(!(Test-Path $logDir){
+  		New-Item -ItemType "Directory" -Path $logDir
+	}
+	$logFile = "$logDir\EmptyFolder-$todayTime.log"
 }
 
 #Function to Log results
