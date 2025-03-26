@@ -13,6 +13,18 @@ param (
 	[string]$jobName
 )
 
+
+if (!($PSBoundParameters.ContainsKey('logPath'))){
+	#CreateLogFile if not passed in
+	$logPath = "C:\Temp"
+}
+
+if (!($PSBoundParameters.ContainsKey('jobName'))){
+	#Create jobName if not passed in
+	$jobName = "roboscript"
+}
+
+
 #Logging Function
 function WriteLog {
 	Param (
@@ -23,19 +35,6 @@ function WriteLog {
 	$LogMessage = "$Stamp $LogString"
 	Add-content $logFile -value $LogMessage
 }
-
-if (!($PSBoundParameters.ContainsKey('logPath'))){
-	#CreateLogFile
-	$logPath = "C:\Temp"
- 	WriteLog "logPath not passed in. Set logPath to $logPath"
-}
-
-if (!($PSBoundParameters.ContainsKey('jobName'))){
-	#Create jobName
-	$jobName = "roboscript"
- 	WriteLog "jobName not passed in. Set jobName to $jobName"
-}
-
 $dateStamp = (Get-Date).toString("yyyyMMddHHmmss")
 
 $logFile = $jobName + $dateStamp
