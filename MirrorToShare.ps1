@@ -3,16 +3,32 @@ param (
 	[string]$sourceShare,
 	[Parameter(Mandatory = $true)]
 	[string]$destShare,
-	[Parameter(Mandatory = $true)]
-	[string]$credFile,
-	[Parameter(Mandatory = $true)]
-	[string]$logFile
+ 	[Parameter(Mandatory = $true)]
+	[string]$userName,
+ 	[Parameter(Mandatory = $true)]
+	[string]$userPass,
+	[Parameter(Mandatory = $false)]
+	[string]$logPath,
+	[Parameter(Mandatory = $false)]
+	[string]$jobName
 )
 
-if (!($PSBoundParameters.ContainsKey('logFile'))){
+if (!($PSBoundParameters.ContainsKey('logPath'))){
 	#CreateLogFile
-	$logFile = "C:\Temp\ShareCopy.log"
+	$logPath = "C:\Temp"
 }
+
+if (!($PSBoundParameters.ContainsKey('logPath'))){
+	#CreateLogFile
+	$jobName = "roboscript"
+}
+
+$dateStamp = (Get-Date).toString("yyyyMMddHHmmss")
+$logFile = $jobName + $dateStamp
+$logFile = "$logFile.log"
+$logFile = $logPath + "\" + $logFile
+$roboLog = $logPath + "\" + "RoboResult" + $dateStamp
+$roboLog= "$roboLog.log"
 
 #Logging Function
 function WriteLog {
@@ -26,11 +42,12 @@ function WriteLog {
 }
 
 try{
+	$securePassword = ConvertTo-SecureString $userPass -AsPlainText -Force
 	# Import a PSCredential object
-	$credential = Import-CliXml -Path $credFile
-	WriteLog "Credential Imported."
+	$credential = New-Object System.Management.Automation.PSCredential($userName,$securePassword)
+	WriteLog "Credential Created."
 } catch {
-	WriteLog "Could Not Import Credential"
+	WriteLog "Could Not Create Credential"
 	WriteLog "An error occurred: $_"
 	throw 
 }
@@ -50,7 +67,7 @@ try{
 
 try{
 	# Use RoboCopy to mirror the local folder to the network share
-	Start-Process -FilePath "robocopy.exe" -ArgumentList "X:\ Z:\ /MIR /LOG+:$logFile /NP /R:3 /W:5" -Wait
+	Start-Process -FilePath "robocopy.exe" -ArgumentList "X:\ Z:\ /MIR /LOG+:$roboLog /NP /R:3 /W:5" -Wait
 	WriteLog "Robocopy Complete."
 } catch {
 	WriteLog "Could not Complete Robocopy."
