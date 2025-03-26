@@ -13,23 +13,6 @@ param (
 	[string]$jobName
 )
 
-if (!($PSBoundParameters.ContainsKey('logPath'))){
-	#CreateLogFile
-	$logPath = "C:\Temp"
-}
-
-if (!($PSBoundParameters.ContainsKey('logPath'))){
-	#CreateLogFile
-	$jobName = "roboscript"
-}
-
-$dateStamp = (Get-Date).toString("yyyyMMddHHmmss")
-$logFile = $jobName + $dateStamp
-$logFile = "$logFile.log"
-$logFile = $logPath + "\" + $logFile
-$roboLog = $logPath + "\" + "RoboResult" + $dateStamp
-$roboLog= "$roboLog.log"
-
 #Logging Function
 function WriteLog {
 	Param (
@@ -40,6 +23,29 @@ function WriteLog {
 	$LogMessage = "$Stamp $LogString"
 	Add-content $logFile -value $LogMessage
 }
+
+if (!($PSBoundParameters.ContainsKey('logPath'))){
+	#CreateLogFile
+	$logPath = "C:\Temp"
+ 	WriteLog "logPath not passed in. Set logPath to $logPath"
+}
+
+if (!($PSBoundParameters.ContainsKey('jobName'))){
+	#CreateLogFile
+	$jobName = "roboscript"
+ 	WriteLog "jobName not passed in. Set logPath to $logPath"
+}
+
+$dateStamp = (Get-Date).toString("yyyyMMddHHmmss")
+
+$logFile = $jobName + $dateStamp
+$logFile = "$logFile.log"
+$logFile = $logPath + "\" + $logFile
+WriteLog "Log File is $logFile"
+
+$roboLog = $logPath + "\" + "RoboResult" + $dateStamp
+$roboLog= "$roboLog.log"
+WriteLog "Robocopy Results are saved as $roboLog"
 
 try{
 	$securePassword = ConvertTo-SecureString $userPass -AsPlainText -Force
