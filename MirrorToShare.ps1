@@ -37,12 +37,12 @@ function WriteLog {
 }
 $dateStamp = (Get-Date).toString("yyyyMMddHHmmss")
 
-$logFile = $jobName + $dateStamp
+$logFile = $jobName + "-" + $dateStamp
 $logFile = "$logFile.log"
 $logFile = $logPath + "\" + $logFile
 WriteLog "Log File is $logFile"
 
-$roboLog = $logPath + "\" + "RoboResult" + $dateStamp
+$roboLog = $logPath + "\" + $jobName + "Robo-" + $dateStamp
 $roboLog= "$roboLog.log"
 WriteLog "Robocopy Results are saved as $roboLog"
 
