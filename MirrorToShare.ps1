@@ -31,9 +31,9 @@ if (!($PSBoundParameters.ContainsKey('logPath'))){
 }
 
 if (!($PSBoundParameters.ContainsKey('jobName'))){
-	#CreateLogFile
+	#Create jobName
 	$jobName = "roboscript"
- 	WriteLog "jobName not passed in. Set logPath to $logPath"
+ 	WriteLog "jobName not passed in. Set jobName to $jobName"
 }
 
 $dateStamp = (Get-Date).toString("yyyyMMddHHmmss")
