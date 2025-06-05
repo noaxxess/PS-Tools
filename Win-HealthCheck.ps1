@@ -253,6 +253,7 @@ if ($sfcStatus -eq "NoCorruption" -and $dismStatus -eq "NoCorruption") {
             return $dismRestoreStatus
         
         } else {
+        
             Write-Log "Clearing old sfcStatus variable."
             $sfcStatus = ""
             Write-Log "Running second SFC scan..."
@@ -260,6 +261,7 @@ if ($sfcStatus -eq "NoCorruption" -and $dismStatus -eq "NoCorruption") {
             Write-Log "SFC Result: $sfcStatus"
             Write-Log "Scanning and repair concluded."
             return $dismRestoreStatus
+            
         }
 
     } else {
@@ -267,5 +269,6 @@ if ($sfcStatus -eq "NoCorruption" -and $dismStatus -eq "NoCorruption") {
         Write-Log "DISM ScanHalth Result: $dismScanStatus"
         Write-Log "Please Troubleshoot Further"
         return $dismScanStatus
+        
     }
 }
