@@ -6,6 +6,7 @@ param (
     [string]$OutputFolder
 )
 
+#Function to Log progress/results
 function Write-Log {
 
     param (
@@ -18,6 +19,7 @@ function Write-Log {
     $LogMessage | Out-File -FilePath $logFile -Encoding utf8 -Append
 }
 
+#function to fix output of scans. Sometimes nullbytes and spaces are inserted and results are not readable
 function Fix-Utf16File {
 
     param (
@@ -40,7 +42,7 @@ function Fix-Utf16File {
 
 
 
-
+#Function to Run SFC, save the output, and return result for analysis
 function Run-SfcScan {
 
     $currentTD = (Get-Date).ToString("yyyyMMddHHmm")
@@ -84,7 +86,7 @@ function Run-SfcScan {
     }
 }
 
-
+#Function to DISM Check Health, save the output, and return result for analysis
 function Run-DismCheckHealth {
 
 
@@ -131,6 +133,7 @@ function Run-DismCheckHealth {
     }
 }
 
+#Function to DISM Scanhealth, save the output, and return result for analysis
 function Run-DismScanHealth {
 
     Write-Log "Starting DISM ScanHealth..."
@@ -178,6 +181,7 @@ function Run-DismScanHealth {
     }
 }
 
+#Function to Run DISM Restore Health, save the output, and return result for analysis
 function Run-DismRestoreHealth {
 
     Write-Log "Starting DISM RestoreHealth..."
@@ -228,11 +232,13 @@ if (-not (Test-Path $Global:OutputFolder)) {
 
 }
 
+#Run SFC Scan and save result to variable
 $sfcStatus = Run-SfcScan
 
+#Run DISM Check Health and save result to variable
 $dismStatus = Run-DismCheckHealth
 
-#Analyze results and run further scans if necessary
+#Analyze results and run further scan/repair if necessary
 if ($sfcStatus -eq "NoCorruption" -and $dismStatus -eq "NoCorruption") {
 
     Write-Log "Scanning Complete. No Issues Found."
@@ -267,7 +273,7 @@ if ($sfcStatus -eq "NoCorruption" -and $dismStatus -eq "NoCorruption") {
     } else {
 
         Write-Log "DISM ScanHalth Result: $dismScanStatus"
-        Write-Log "Please Troubleshoot Further"
+        Write-Log "Please check CBS log and troubleshoot further"
         return $dismScanStatus
         
     }
