@@ -137,7 +137,7 @@ function Run-DismScanHealth {
 
     $currentTD = (Get-Date).ToString("yyyyMMddHHmm")
 
-    $outputFile = Join-Path $Global:OutputFolder "dism_dh-$currentTD.txt"
+    $outputFile = Join-Path $Global:OutputFolder "dism_sh-$currentTD.txt"
 
     dism /online /cleanup-image /scanhealth 2>&1 | Out-File -FilePath $outputFile -Encoding string
 
