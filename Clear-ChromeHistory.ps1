@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
-	Removes Google Chrome history entries. Script adapted from function created by Theo Ros. Added Logging Function and ability to automatically stop Chrome and continue running.
+	Removes Google Chrome history entries. Script adapted from function created by Theo Ros. 
+ Added Logging Function and ability to automatically stop Chrome and continue running.
+ Removed Passwords from "All" 
 .DESCRIPTION
 	Removes Google Chrome history entries.
 .NOTES
@@ -149,19 +151,22 @@ if ($psCmdlet.ParameterSetName -eq 'Recommended') {
 
 $msg = @()
 $items = @()
-if ($ArchivedHistory -or $All) { $items += "Archived History*"             ; $msg += "Archived History" }
-if ($BrowsingHistory -or $All) { $items += @("History*", "Visited Links*") ; $msg += @("History", "Visited Links") }
-if ($Cookies -or $All)         { $items += "Cookies*"                      ; $msg += "Cookies" }
-if ($Favicons -or $All)        { $items += "Favicons*"                     ; $msg += "Favicons" }
-if ($FormData -or $All)        { $items += "Web Data*"                     ; $msg += "Form Data" }
-if ($MediaData -or $All)       { $items += "Media Cache*"                  ; $msg += "Media Cache" }
-if ($Passwords -or $All)       { $items += "Login Data*"                   ; $msg += "Passwords" }
-if ($TemporaryFiles -or $All)  { $items += "Cache*"                        ; $msg += "Temporary Files Cache" }
-if ($TopSites -or $All)        { $items += "Top Sites*"                    ; $msg += "Top Sites" }
+if ($ArchivedHistory -or $All) 	{ $items += "Archived History*"             ; $msg += "Archived History" }
+if ($BrowsingHistory -or $All) 	{ $items += @("History*", "Visited Links*") ; $msg += @("History", "Visited Links") }
+if ($Cookies -or $All)         	{ $items += "Cookies*"                      ; $msg += "Cookies" }
+if ($Favicons -or $All)     	{ $items += "Favicons*"                     ; $msg += "Favicons" }
+if ($FormData -or $All)		{ $items += "Web Data*"                     ; $msg += "Form Data" }
+if ($MediaData -or $All)	{ $items += "Media Cache*"                  ; $msg += "Media Cache" }
+if ($Passwords)       		{ $items += "Login Data*"                   ; $msg += "Passwords" }
+if ($TemporaryFiles -or $All)  	{ $items += "Cache*"                        ; $msg += "Temporary Files Cache" }
+if ($TopSites -or $All)        	{ $items += "Top Sites*"                    ; $msg += "Top Sites" }
 
+#Save current Error Action Preference
 $oldErrorActionPreference = $ErrorActionPreference
+
 $ErrorActionPreference = 'SilentlyContinue'
 
+#Create a reference date based on DaysToKeep Parameter
 $refdate = (Get-Date).AddDays(-([Math]::Abs($DaysToKeep)))
 
 $allItems = @()
