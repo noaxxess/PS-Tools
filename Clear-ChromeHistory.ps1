@@ -138,6 +138,7 @@ $path = "$($env:LOCALAPPDATA)\Google\Chrome\User Data\Default"
 if (!(Test-Path -Path $path -PathType Container)) {
 	
 	Write-Log "Chrome history path '$path' not found."
+ 	Write-Log "Stopping Script..."
 	return
 	
 }
@@ -210,3 +211,4 @@ if ($allItems.Length) {
 
 Write-Log "Setting Error Action back to original setting..."
 $ErrorActionPreference = $oldErrorActionPreference
+Write-Log "Stopping Script..."
