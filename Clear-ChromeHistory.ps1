@@ -48,7 +48,7 @@
 param (
 
 	[Parameter(Mandatory = $false, Position = 0)]
-	[int] $DaysToKeep = 7,
+	[int] $DaysToKeep = 0,
 	
 	[switch] $Kill,
 
