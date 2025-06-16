@@ -86,20 +86,23 @@ param (
 
 function Write-Log {
 
-param (
-	[Parameter(Mandatory = $true)]
-	[string]$LogString
-)
+	param (
+		[Parameter(Mandatory = $true)]
+		[string]$LogString
+	)
+	
+	$logFile = Join-Path $Global:OutputFolder $Global:LogFile
+	$Stamp = (Get-Date).ToString("yyyy/MM/dd HH:mm:ss")
+	$LogMessage = "$Stamp $LogString"
+	$LogMessage | Out-File -FilePath $logFile -Encoding utf8 -Append
 
-$logFile = Join-Path $Global:OutputFolder $Global:LogFile
-$Stamp = (Get-Date).ToString("yyyy/MM/dd HH:mm:ss")
-$LogMessage = "$Stamp $LogString"
-$LogMessage | Out-File -FilePath $logFile -Encoding utf8 -Append
 }
 
+Write-Log "Starting $($MyInvocation.MyCommand)..."
 
 $Global:LogFile = $LogFile
 $Global:OutputFolder = $OutputFolder
+Write-Log "Global Variables Set..."
 
 if (Get-Process -Name chrome -ErrorAction SilentlyContinue) {
 	
@@ -109,12 +112,12 @@ if (Get-Process -Name chrome -ErrorAction SilentlyContinue) {
 		
 		Write-Log "Kill switch provided. Stopping Chrome..."
 		Get-Process -Name chrome -ErrorAction SilentlyContinue | Stop-Process -ErrorAction SilentlyContinue
-		Write-Log "Pausing for 1 second"
+		Write-Log "Pausing for 1 second..."
 		Start-Sleep -Seconds 1
 		
 		if (Get-Process | Where-Object { $_.Name -eq "chrome" }){
 			
-			Write-Log "Chrome is still running. Stopping Process was unsuccessful"
+			Write-Log "Chrome is still running. Stopping Process using script was unsuccessful."
 			Write-Log "Stopping Script..."
 			return
 			
@@ -134,13 +137,14 @@ if (Get-Process -Name chrome -ErrorAction SilentlyContinue) {
 $path = "$($env:LOCALAPPDATA)\Google\Chrome\User Data\Default"
 if (!(Test-Path -Path $path -PathType Container)) {
 	
-	Write-Log "Chrome history path '$path' not found"
+	Write-Log "Chrome history path '$path' not found."
 	return
 	
 }
 
 if ($psCmdlet.ParameterSetName -eq 'Recommended') {
 	
+ 	Write-Log "Recommended Switch Selected."
 	# remove all these:
 	$ArchivedHistory = $BrowsingHistory = $Cookies = $Favicons = $MediaData = $TemporaryFiles = $true
 	
@@ -164,10 +168,12 @@ if ($TopSites -or $All)        	{ $items += "Top Sites*"                    ; $m
 #Save current Error Action Preference
 $oldErrorActionPreference = $ErrorActionPreference
 
+Write-Log "Setting Error Action to Silently Continue..."
 $ErrorActionPreference = 'SilentlyContinue'
 
 #Create a reference date based on DaysToKeep Parameter
 $refdate = (Get-Date).AddDays(-([Math]::Abs($DaysToKeep)))
+Write-Log "refDate set to $($refdate.ToString())"
 
 $allItems = @()
 
@@ -183,7 +189,7 @@ if ($items.Length) {
 
 if ($allItems.Length) {
 	
- # List Items to be reomved
+ # List Items to be removed
 	$join = "`r`n "
 	$msg = ($msg | Sort-Object) -join $join
 	Write-Log ("$($MyInvocation.MyCommand) Clearing:$join$msg")
@@ -198,7 +204,9 @@ if ($allItems.Length) {
 } else {
 
 	Write-Log "$($MyInvocation.MyCommand): Nothing selected or older than $($refdate.ToString()) found"
+ 	Write-Log "Stopping Script..."
 
 }
 
+Write-Log "Setting Error Action back to original setting..."
 $ErrorActionPreference = $oldErrorActionPreference
