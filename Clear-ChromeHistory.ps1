@@ -91,7 +91,7 @@ function Write-Log {
 		[string]$LogString
 	)
 	
-	$logFile = Join-Path $Global:OutputFolder $Global:LogFile
+	$logFile = Join-Path $OutputFolder $LogFile
 	$Stamp = (Get-Date).ToString("yyyy/MM/dd HH:mm:ss")
 	$LogMessage = "$Stamp $LogString"
 	$LogMessage | Out-File -FilePath $logFile -Encoding utf8 -Append
@@ -99,10 +99,6 @@ function Write-Log {
 }
 
 Write-Log "Starting $($MyInvocation.MyCommand)..."
-
-$Global:LogFile = $LogFile
-$Global:OutputFolder = $OutputFolder
-Write-Log "Global Variables Set..."
 
 if (Get-Process -Name chrome -ErrorAction SilentlyContinue) {
 	
